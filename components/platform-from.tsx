@@ -11,6 +11,15 @@ import {
   IconBrandLeetcode,
   IconBrandX
 } from "@tabler/icons-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { Switch } from "./ui/switch";
 import TimeInput from "./ui/time-input";
 import SelectTimezone from "./ui/select-input";
@@ -101,11 +110,35 @@ export function PlatformForm() {
             <TimeInput />
           </LabelInputContainer>
         </div>
-        <div
-        
-        >
-          <Switch id="activate" />
-          <Label htmlFor="twitterpassword" className="ml-4 text-center h-4 text-xl">Activate</Label>
+        <div>
+        <Dialog>
+          <DialogTrigger>
+            <Switch id="activate" />
+            <Label htmlFor="activate" className="ml-4 text-center h-4 text-xl">Activate</Label>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This is will start posting updates of contribution in every 24 hrs startimg from 00:00 IST
+                <div className= "mt-8 w-full flex justify-between" >
+                  <button
+                      type="submit"
+                      className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="submit"
+                      className="w-[100px] h-10 text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                    >
+                      Cancel
+                    </button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
         </div>
 
         <Seperator />
