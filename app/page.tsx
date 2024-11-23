@@ -1,9 +1,7 @@
 'use client'
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
-import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { Spotlight } from "@/components/ui/spotlight";
+import { Spotlight } from "../components/ui/spotlight";
 
 
 export default function Home() {
