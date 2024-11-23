@@ -6,7 +6,7 @@ interface SpotlightProps {
   fill?: string;
 };
 
-export function Spotlight ({ className, fill }: SpotlightProps) {
+export default function Spotlight ({ className, fill }: SpotlightProps) {
   return (
     <svg
       className={cn(
