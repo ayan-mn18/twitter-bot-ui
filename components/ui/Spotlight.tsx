@@ -6,7 +6,7 @@ type SpotlightProps = {
   fill?: string;
 };
 
-const Spotlight = ({ className, fill }: SpotlightProps) => {
+export const Spotlight = ({ className, fill }: SpotlightProps) => {
   return (
     <svg
       className={cn(
@@ -54,5 +54,3 @@ const Spotlight = ({ className, fill }: SpotlightProps) => {
     </svg>
   );
 };
-
-export default Spotlight
