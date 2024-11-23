@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { IconBrandBitbucket, IconBrandGithub, IconBrandLeetcode } from "@tabler/icons-react";
 import { DivideSquare } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -13,6 +14,7 @@ export const InfiniteMovingCards = ({
 }: {
   items: {
     name: string;
+    icon: React.ReactNode;
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
@@ -85,14 +87,19 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <li
-            className="w-[200px] max-w-full relative rounded-2xl border border-b-0 flex-shrink-0 border-slate-700 px-8 py-6 md:w-[200px]"
+            className="w-[100px] max-w-full relative rounded-2xl border flex-shrink-0 border-slate-700 items-center flex flex-col justify-center py-4 px-10"
             style={{
               background:
                 "linear-gradient(180deg, var(--slate-800), var(--slate-900)",
             }}
             key={item.name}
           >
-            {item.name}
+            <p>
+              {item.icon}
+            </p>
+            <p>
+              {item.name}
+            </p>
           </li>
         ))}
       </ul>

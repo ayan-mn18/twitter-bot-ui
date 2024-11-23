@@ -2,6 +2,7 @@
 
 import React from "react";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
+import { IconBrandBitbucket, IconBrandGithub, IconBrandLeetcode, IconBrandNotion, IconBrandOnlyfans } from "@tabler/icons-react";
 
 const Hero = () => {
   return (
@@ -65,18 +66,24 @@ export default Hero;
 
 const platforms = [
   {
-    name: "Charles Dickens",
+    name: "Github",
+    icon: <IconBrandGithub className="size-16" />
   },
   {
-    name: "William Shakespeare",
+    name: "Leetcode",
+    icon: <IconBrandLeetcode className="size-16" />
   },
   {
-    name: "Edgar Allan Poe",
+    name: "Bitbucket",
+    icon: <IconBrandBitbucket className="size-16" />
   },
   {
-    name: "Jane Austen",
+    name: "Onlyfans",
+    icon: <IconBrandOnlyfans className="size-16" />
   },
   {
-    name: "Herman Melville",
+    name: "Notion",
+    icon: <IconBrandNotion className="size-16" />
   },
+
 ];
