@@ -38,7 +38,7 @@ export default function Spotlight ({ className, fill }: SpotlightProps) {
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
-          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+          {/* <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -48,7 +48,7 @@ export default function Spotlight ({ className, fill }: SpotlightProps) {
           <feGaussianBlur
             stdDeviation="151"
             result="effect1_foregroundBlur_1065_8"
-          ></feGaussianBlur>
+          ></feGaussianBlur> */}
         </filter>
       </defs>
     </svg>
