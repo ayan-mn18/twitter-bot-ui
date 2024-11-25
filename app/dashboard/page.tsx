@@ -1,9 +1,8 @@
-"use client"
-
 import Navbar from "@/components/navbar";
 import { PlatformForm } from "@/components/platform-from"
 
-export default function Home() {
+export default  function Home () {
+
   return (
     <>
     <Navbar />
