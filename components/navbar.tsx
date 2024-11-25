@@ -12,10 +12,21 @@ import {
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { cn } from '@/lib/utils';
+import { SessionProvider, signIn, useSession } from "next-auth/react";
+
 
 type Props = {}
 
 const Navbar = () => {
+  const UserInfo = () => {
+    const { data: session } = useSession();
+  
+    if (session?.accessToken) {
+      return <p>Access Token: {session.accessToken}</p>;
+    }
+  
+    return <p>No access token available</p>;
+  };
   const router = useRouter();
   return (
     <nav className="flex items-center justify-between px-4 py-3 fixed w-full max-w-[1300px]">
@@ -50,15 +61,23 @@ const Navbar = () => {
                 <button
                     type="submit"
                     className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      signIn('twitter')
+                      router.push('/dashboard')
+                    }}
                   >
-                    Sign Up
+                    Sign In
                   </button>
               </div>
             </form>
           </DialogHeader>
         </DialogContent>
       </Dialog>
-        <ModeToggle />
+      <ModeToggle />
+      <div>
+       {UserInfo()}
+      </div>
       </div>
     </nav>
   );
