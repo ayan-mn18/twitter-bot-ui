@@ -93,9 +93,42 @@ export function PlatformForm() {
 
         <Seperator />
 
-        <h3 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 mb-12">
-          Job Details
-        </h3>
+        <div className="flex justify-between" >
+
+          <h3 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 mb-12">
+            Job Details
+          </h3>
+
+          <Dialog>
+            <DialogTrigger>
+              <Switch id="activate" />
+              <Label htmlFor="activate" className="ml-4 text-center h-4 text-xl">Activate</Label>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This is will start posting updates of contribution in every 24 hrs startimg from 00:00 IST
+                  <div className= "mt-8 w-full flex justify-between" >
+                    <button
+                        type="submit"
+                        className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="submit"
+                        className="w-[100px] h-10 text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                      >
+                        Cancel
+                      </button>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
+
         
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
           <LabelInputContainer className="mb-4">
@@ -111,34 +144,6 @@ export function PlatformForm() {
           </LabelInputContainer>
         </div>
         <div>
-        <Dialog>
-          <DialogTrigger>
-            <Switch id="activate" />
-            <Label htmlFor="activate" className="ml-4 text-center h-4 text-xl">Activate</Label>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This is will start posting updates of contribution in every 24 hrs startimg from 00:00 IST
-                <div className= "mt-8 w-full flex justify-between" >
-                  <button
-                      type="submit"
-                      className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                    >
-                      Yes
-                    </button>
-                    <button
-                      type="submit"
-                      className="w-[100px] h-10 text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
-                    >
-                      Cancel
-                    </button>
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
         </div>
 
         <Seperator />
