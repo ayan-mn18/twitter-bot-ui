@@ -3,11 +3,25 @@
 "use client";
 
 import { Clock } from "lucide-react";
-import { DateInput, DateSegment, Label, TimeField } from "react-aria-components";
+import { DateInput, DateSegment, Label, TimeField, TimeValue } from "react-aria-components";
+import { JobDetails } from "../platform-from";
+import { parseAbsoluteToLocal } from '@internationalized/date';
 
-export default function TimeInput() {
+
+type SelectProps = {
+  jobDetails: JobDetails 
+  setJobDetails: React.Dispatch<React.SetStateAction<JobDetails>>
+}
+
+export default function TimeInput({ jobDetails, setJobDetails }: SelectProps) {
+  // $35ea8db9cb2ccb90$export$680ea196effce5f
+  const defaultTime: TimeValue = parseAbsoluteToLocal(new Date().toISOString());
+
   return (
-    <TimeField className="space-y-2">
+    <TimeField className="space-y-2" onChange={(val) => setJobDetails((prev: JobDetails) => ({
+      ...prev, 
+      jobStartTime: val as TimeValue
+    }))}  defaultValue={defaultTime} >
       <Label className="text-sm font-medium text-foreground">Job Start Time</Label>
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 start-0 z-10 flex items-center justify-center ps-3 text-muted-foreground/80">

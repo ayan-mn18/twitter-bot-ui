@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
@@ -22,13 +22,44 @@ import {
 
 import { Switch } from "./ui/switch";
 import TimeInput from "./ui/time-input";
-import SelectTimezone from "./ui/select-input";
+import { SelectJobFrequency, SelectTimezone } from "./ui/select-input";
+import { Spinner } from "./ui/spinner";
+import { useApi } from "@/hooks/use-api";
+import { TimeValue } from "react-aria-components";
+
+export type Timezone = "IST" | "GMT" | "UTC" | "PST"
+export type JobFrequency = "24hrs" | "12hrs" | "6hrs"
+
+export type JobDetails = {
+  timezone: Timezone 
+  jobStartTime: TimeValue,
+  jobFrequency: JobFrequency
+}
 
 export function PlatformForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
   };
+
+  const [ghUsername, setGhUsername] = useState("");
+  const [jobDetails, setJobDetails] = useState<JobDetails>();
+
+  const { response, error, loading: ghLoader, fetchData } = useApi({
+    url: "http://localhost:4004/api/platforms/checkvalidghusername",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: { username: ghUsername },
+    successToastTitle: "Github Connected" 
+  });
+
+  console.log("response: ", response)
+  console.log("error: ", error)
+  console.log("loader: ", ghLoader)
+  console.log("username: ", ghUsername)
+  console.log("jobDetails: ", jobDetails)
+  console.log("jobDetails: ", jobDetails?.jobStartTime.toString())
+
   return (
     <div className="w-full max-w-[1000px] mx-auto rounded-none md:rounded-2xl p-4 pt-24 md:p-8 shadow-input bg-white dark:bg-black">
       <h1 className="font-bold text-3xl text-neutral-800 dark:text-neutral-200 text-center">
@@ -47,47 +78,61 @@ export function PlatformForm() {
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="github_username" type="text" />
+            <Input id="lastname" placeholder="github_username" type="text" onChange={(e) => setGhUsername(e.target.value)} />
           </LabelInputContainer>
           <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"
+            onClick={fetchData}
           >
-            <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              Connect
-            </span>
+            { ghLoader && (
+                <div className="m-auto" >
+                  <Spinner size='small' />
+                </div>
+              ) }
+            {
+              !ghLoader && (
+                <>
+                  <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                  <span className="text-neutral-700 dark:text-neutral-300 text-sm" >
+                    Connect
+                  </span>
+                </>
+              )
+            }
             <BottomGradient />
           </button>
         </div>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="bitbucket_username" type="text" />
+            <Input id="lastname" placeholder="bitbucket_username" type="text" disabled />
           </LabelInputContainer>
           <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)] opacity-65"
             type="submit"
+            disabled
           >
             <IconBrandBitbucket className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-neutral-700 dark:text-neutral-300 text-sm">
               Connect
             </span>
-            <BottomGradient />
+            {/* <BottomGradient /> */}
           </button>
         </div>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="leetcode_username" type="text" />
+            <Input id="lastname" placeholder="leetcode_username" type="text" disabled />
           </LabelInputContainer>
           <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)] opacity-65"
             type="submit"
+            disabled
           >
             <IconBrandLeetcode className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-neutral-700 dark:text-neutral-300 text-sm">
               Connect
             </span>
-            <BottomGradient />
+            {/* <BottomGradient /> */}
           </button>
         </div>
 
@@ -132,15 +177,15 @@ export function PlatformForm() {
         
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
           <LabelInputContainer className="mb-4">
-            <SelectTimezone />
+            <SelectTimezone jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <SelectTimezone />
+            <SelectJobFrequency jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
         </div>
         <div className="flex flex-col md:flex-row  md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer className="mb-4">
-            <TimeInput />
+            <TimeInput jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
         </div>
         <div>
