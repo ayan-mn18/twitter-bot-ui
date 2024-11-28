@@ -31,7 +31,7 @@ export type Timezone = "IST" | "GMT" | "UTC" | "PST"
 export type JobFrequency = "24hrs" | "12hrs" | "6hrs"
 
 export type JobDetails = {
-  timezone: Timezone 
+  timezone: Timezone
   jobStartTime: TimeValue,
   jobFrequency: JobFrequency
 }
@@ -50,7 +50,7 @@ export function PlatformForm() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     data: { username: ghUsername },
-    successToastTitle: "Github Connected" 
+    successToastTitle: "Github Connected"
   });
 
   console.log("response: ", response)
@@ -66,7 +66,7 @@ export function PlatformForm() {
         Welcome to Twitter Bot
       </h1>
       <h1 className="text-neutral-600 max-w-sm m-auto mt-5 text-sm dark:text-neutral-200 text-center">
-      Connect different platforms to start posting updates on yout contributions on twitter
+        Connect different platforms to start posting updates on yout contributions on twitter
       </h1>
 
       <Seperator />
@@ -85,11 +85,11 @@ export function PlatformForm() {
             type="submit"
             onClick={fetchData}
           >
-            { ghLoader && (
-                <div className="m-auto" >
-                  <Spinner size='small' />
-                </div>
-              ) }
+            {ghLoader && (
+              <div className="m-auto" >
+                <Spinner size='small' />
+              </div>
+            )}
             {
               !ghLoader && (
                 <>
@@ -154,19 +154,19 @@ export function PlatformForm() {
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                 <DialogDescription>
                   This is will start posting updates of contribution in every 24 hrs startimg from 00:00 IST
-                  <div className= "mt-8 w-full flex justify-between" >
+                  <div className="mt-8 w-full flex justify-between" >
                     <button
-                        type="submit"
-                        className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                      >
-                        Yes
-                      </button>
-                      <button
-                        type="submit"
-                        className="w-[100px] h-10 text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
-                      >
-                        Cancel
-                      </button>
+                      type="submit"
+                      className="w-[100px] h-10 text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="submit"
+                      className="w-[100px] h-10 text-white bg-red-600 rounded-md hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </DialogDescription>
               </DialogHeader>
@@ -174,20 +174,23 @@ export function PlatformForm() {
           </Dialog>
         </div>
 
-        
+
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
           <LabelInputContainer className="mb-4">
-            <SelectTimezone jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
+            <SelectTimezone jobDetails={jobDetails as JobDetails} setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <SelectJobFrequency jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
+            <SelectJobFrequency jobDetails={jobDetails as JobDetails} setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
         </div>
         <div className="flex flex-col md:flex-row  md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer className="mb-4">
-            <TimeInput jobDetails={jobDetails as JobDetails}  setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
+            <TimeInput jobDetails={jobDetails as JobDetails} setJobDetails={setJobDetails as React.Dispatch<React.SetStateAction<JobDetails>>} />
           </LabelInputContainer>
         </div>
+        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600" >
+          Save
+        </button>
         <div>
         </div>
 
@@ -221,7 +224,7 @@ const LabelInputContainer = ({
 };
 
 const Seperator = () => {
-  return(
+  return (
     <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
   )
 }
