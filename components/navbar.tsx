@@ -10,8 +10,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from './ui/input';
 import { cn } from '@/lib/utils';
+import { IconSettings } from '@tabler/icons-react';
 
 
 type Props = {}
@@ -20,6 +29,10 @@ const Navbar = () => {
   const router = useRouter();
   const path = usePathname()
   const [email, setEmail] = useState<string>("");
+  const [userData, setUserData] = useState<any | null>(JSON.parse(localStorage.getItem('userData')!));
+
+  console.log("userData: ", userData)
+
 
   const handleConnectX = async () => {
 
@@ -31,6 +44,11 @@ const Navbar = () => {
     // Step 2: Redirect the user to Twitter for authorization
     window.location.href = twitterAuthUrl;
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    router.push("/")
+  }
 
   return (
     <nav className="flex items-center justify-between px-4 py-3 fixed w-full max-w-[1300px]">
@@ -45,7 +63,7 @@ const Navbar = () => {
 
       {/* Buttons */}
       <div className="flex items-center space-x-4">
-      {/* <Dialog>
+        {/* <Dialog>
         <DialogTrigger>
           <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
             Connect X
@@ -80,12 +98,27 @@ const Navbar = () => {
           </DialogHeader>
         </DialogContent>
       </Dialog> */}
-      { path !== '/dashboard' && (
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600" onClick={handleConnectX} >
-        Connect X
-      </button>
-      ) }
-      <ModeToggle />
+        {path !== '/dashboard' && (
+          <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600" onClick={handleConnectX} >
+            Connect X
+          </button>
+        )}
+        <ModeToggle />
+        {isUserSignedIn() && (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <IconSettings />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>{userData?.twitterUsername}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} >Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/dashboard")} >Dashboard</DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
 
       </div>
     </nav>
@@ -107,3 +140,30 @@ const LabelInputContainer = ({
     </div>
   );
 };
+
+export const isUserSignedIn = (): boolean => {
+  const userData = localStorage.getItem("userData");
+
+  // If userData doesn't exist or is invalid, return false
+  if (!userData) {
+    return false;
+  }
+
+  try {
+    // Parse the user data to an object (assuming JSON format)
+    const parsedData = JSON.parse(userData);
+
+    // Optionally, you can validate the structure of the parsed data
+    if (parsedData && parsedData.twitterUsername) {
+      // If the user has a valid userId, consider them signed in
+      return true;
+    }
+  } catch (error) {
+    // Handle parsing error (if data is malformed)
+    console.error("Error parsing user data:", error);
+  }
+
+  // Return false if the structure is invalid
+  return false;
+};
+

@@ -1,12 +1,20 @@
 "use server"
 
-import { signinUser } from "@/util/api";
+import { signinUser, SignInUserResponse } from "@/util/api";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
 
   const searchParams = req.nextUrl.searchParams
   const code = searchParams.get('code')
+  const error = searchParams.get('error')
+
+  if(error) {
+    // TODO
+    // Create a modal for error in signin
+    return NextResponse.redirect(new URL('/', req.url))
+  }
+
   console.log('code: ', code)
 
   if (!code) return;
@@ -44,10 +52,13 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
     })
 
     console.log("signInResponse: ", signInResponse)
+    return NextResponse.redirect(new URL(`/dashboard?userData=${JSON.stringify(signInResponse?.data)}`, req.url))
     // TODO: create a toast
   } else {
     console.error("Error exchanging token", data);
+    // Create a modal for error in signin
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
-  return NextResponse.redirect(new URL('/dashboard', req.url))
+  // return NextResponse.redirect(new URL('/dashboard', req.url))
 };
