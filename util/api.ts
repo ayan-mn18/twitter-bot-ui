@@ -8,6 +8,17 @@ type SignInUserRequest = {
   refreshToken: string;
 };
 
+type TestTweetRequestBody = {
+  tweetText: string;
+  userId: string;
+}
+
+type TestTweetResponseBody = {
+  data: {
+    tweetText: string;
+  }
+}
+
 export type SignInUserResponse = {
   message: string;
   statusCode: number
@@ -59,4 +70,29 @@ export async function signinUser(input: SignInUserRequest): Promise<SignInUserRe
   }
 }
 
+export async function testTweet(input: TestTweetRequestBody): Promise<TestTweetResponseBody> {
+  try{
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/twitter/test-tweet`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Test tweet failed');
+    }
+
+    const responseData: TestTweetResponseBody = await response.json();
+
+    // save the user data in cookies
+    console.log("Test tweet failed response: ", responseData)
+    return responseData;
+  } catch (error) {
+    console.error('Error testing tweet:', error);
+    throw error;
+  }
+}
 

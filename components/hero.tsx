@@ -6,11 +6,11 @@ import { IconBrandBitbucket, IconBrandGithub, IconBrandLeetcode, IconBrandNotion
 
 const Hero = () => {
   return (
-    <section className="flex flex-col items-center justify-center px-6 pt-24 text-center text-white md:px-12 h-[100vh]">
+    <section className="flex flex-col items-center justify-center px-6 pt-24 text-center text-white md:px-12 h-[100vh] w-full">
       {/* Heading */}
       <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl max-w-3xl">
         Use Twitter Bot for Free,
-      </h1> 
+      </h1>
       <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl max-w-3xl">
         You Will Like It!
       </h1>
@@ -56,7 +56,7 @@ const Hero = () => {
           speed="slow"
           className=""
         />
-    </div>
+      </div>
     </section>
   );
 };
