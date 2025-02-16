@@ -1,5 +1,7 @@
 "use server"
+import { toast } from '@/hooks/use-toast';
 import Cookies from 'js-cookie';
+import { Type } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 
 
@@ -96,3 +98,87 @@ export async function testTweet(input: TestTweetRequestBody): Promise<TestTweetR
   }
 }
 
+export type validGithubUserRequest = {
+  userId: string;
+  githubUsername: string;
+}
+
+export type validGithubUserResponse = {
+  message: string;
+  statusCode: number;
+  status: boolean;
+  data: {
+    valid: boolean;
+  }
+}
+
+export async function checkValidGithubUsername(input: validGithubUserRequest): Promise<validGithubUserResponse> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/platforms/check-valid-gh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("errorData: ", errorData)
+      console.log("errorData.message: ", "Failed to check valid github username")
+      return errorData;
+    }
+
+    const responseData: validGithubUserResponse = await response.json();
+
+    // save the user data in cookies
+    console.log("Valid Github username response: ", responseData)
+    return responseData;
+  } catch (error) {
+    console.error('Error checking valid github username:', error);
+    throw error;
+  }
+}
+
+export type validLeetCodeUserRequest = {
+  userId: string;
+  leetcodeUsername: string;
+}
+
+export type validLeetCodeUserResponse = {
+  message: string;
+  statusCode: number;
+  status: boolean;
+  data: {
+    valid: boolean;
+  }
+}
+
+export async function checkValidLeetcodeUsername(input: validLeetCodeUserRequest): Promise<validLeetCodeUserResponse> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/platforms/check-valid-lc`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("errorData: ", errorData)
+      console.log("errorData.message: ", "Failed to check valid leetcode username")
+      return errorData;
+    }
+
+    const responseData: validGithubUserResponse = await response.json();
+
+    // save the user data in cookies
+    console.log("Valid Leetcode username response: ", responseData)
+    return responseData;
+  } catch (error) {
+    console.error('Error checking valid leetcode username:', error);
+    throw error;
+  }
+  
+}

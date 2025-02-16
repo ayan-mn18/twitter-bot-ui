@@ -26,6 +26,8 @@ import { SelectJobFrequency, SelectTimezone } from "./ui/select-input";
 import { Spinner } from "./ui/spinner";
 import { useApi } from "@/hooks/use-api";
 import { TimeValue } from "react-aria-components";
+import { checkValidGithubUsername, checkValidLeetcodeUsername } from "@/util/api";
+import { toast } from "@/hooks/use-toast";
 
 export type Timezone = "IST" | "GMT" | "UTC" | "PST"
 export type JobFrequency = "24hrs" | "12hrs" | "6hrs"
@@ -42,20 +44,66 @@ export function PlatformForm() {
     console.log("Form submitted");
   };
 
+  const userData = JSON.parse(localStorage.getItem("userData") || '{}');
+
   const [ghUsername, setGhUsername] = useState("");
+  const [lcUsername, setLcUsername] = useState("");
+  const [ghLoader, setGhLoader] = useState(false);
+  const [lcLoader, setLcLoader] = useState(false);
   const [jobDetails, setJobDetails] = useState<JobDetails>();
 
-  const { response, error, loading: ghLoader, fetchData } = useApi({
-    url: "http://localhost:4004/api/platforms/checkvalidghusername",
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    data: { username: ghUsername },
-    successToastTitle: "Github Connected"
-  });
+  const checkValidGHU = async () => {
+    setGhLoader(true);
+    try {
+      const data = await checkValidGithubUsername({ userId: userData.user.userId, githubUsername: ghUsername });
+      // add a toast if api is successful
+      if (data.data.valid) {
+        toast({
+          title: "Success",
+          description: "Github account connected successfully",
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Github account not connected",
+          duration: 5000,
+        });
+      }
 
-  console.log("response: ", response)
-  console.log("error: ", error)
-  console.log("loader: ", ghLoader)
+      console.log("data: ", data);
+    } catch (error) {
+      console.error("Error fetching data from github: ", error);
+    }
+    setGhLoader(false);
+  }
+
+  const checkValidLCU = async () => {
+    setLcLoader(true);
+    try {
+      const data = await checkValidLeetcodeUsername({ userId: userData.user.userId, leetcodeUsername: lcUsername });
+      // add a toast if api is successful
+      if (data.data.valid) {
+        toast({
+          title: "Success",
+          description: "Leetcode account connected successfully",
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Leetcode account not connected",
+          duration: 5000,
+        });
+      }
+
+      // console.log("data: ", data);
+    } catch (error) {
+      console.error("Error fetching data from leetcode: ", error);
+    }
+    setLcLoader(false);
+  }
+
   console.log("username: ", ghUsername)
   console.log("jobDetails: ", jobDetails)
   console.log("jobDetails: ", jobDetails?.jobStartTime.toString())
@@ -83,7 +131,7 @@ export function PlatformForm() {
           <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"
-            onClick={fetchData}
+            onClick={checkValidGHU}
           >
             {ghLoader && (
               <div className="m-auto" >
@@ -121,17 +169,27 @@ export function PlatformForm() {
         </div>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="leetcode_username" type="text" disabled />
+            <Input id="lastname" placeholder="leetcode_username" type="text" onChange={(e) => setLcUsername(e.target.value)} />
           </LabelInputContainer>
           <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)] opacity-65"
-            type="submit"
-            disabled
+            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+            onClick={checkValidLCU}
           >
-            <IconBrandLeetcode className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              Connect
-            </span>
+            {lcLoader && (
+              <div className="m-auto" >
+                <Spinner size='small' />
+              </div>
+            )}
+            {
+              !lcLoader && (
+                <>
+                  <IconBrandLeetcode className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                  <span className="text-neutral-700 dark:text-neutral-300 text-sm" >
+                    Connect
+                  </span>
+                </>
+              )
+            }
             {/* <BottomGradient /> */}
           </button>
         </div>
