@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,7 @@ import { useApi } from "@/hooks/use-api";
 import { TimeValue } from "react-aria-components";
 import { checkValidGithubUsername, checkValidLeetcodeUsername } from "@/util/api";
 import { toast } from "@/hooks/use-toast";
+import { User } from "lucide-react";
 
 export type Timezone = "IST" | "GMT" | "UTC" | "PST"
 export type JobFrequency = "24hrs" | "12hrs" | "6hrs"
@@ -46,8 +47,8 @@ export function PlatformForm() {
 
   const userData = JSON.parse(localStorage.getItem("userData") || '{}');
 
-  const [ghUsername, setGhUsername] = useState("");
-  const [lcUsername, setLcUsername] = useState("");
+  const [ghUsername, setGhUsername] = useState(userData?.user?.github_username || "");
+  const [lcUsername, setLcUsername] = useState(userData?.user?.leetcode_username || "");
   const [ghLoader, setGhLoader] = useState(false);
   const [lcLoader, setLcLoader] = useState(false);
   const [jobDetails, setJobDetails] = useState<JobDetails>();
@@ -63,12 +64,15 @@ export function PlatformForm() {
           description: "Github account connected successfully",
           duration: 5000,
         });
+        // set this username in local storage
+        localStorage.setItem("userData", JSON.stringify({ ...userData, user: { ...userData.user, github_username: ghUsername } }));
       } else {
         toast({
           title: "Error",
           description: "Github account not connected",
           duration: 5000,
         });
+        setGhUsername(userData?.user?.github_username);
       }
 
       console.log("data: ", data);
@@ -89,12 +93,15 @@ export function PlatformForm() {
           description: "Leetcode account connected successfully",
           duration: 5000,
         });
+        // set this username in local storage
+        localStorage.setItem("userData", JSON.stringify({ ...userData, user: { ...userData.user, leetcode_username: lcUsername } }));
       } else {
         toast({
           title: "Error",
           description: "Leetcode account not connected",
           duration: 5000,
         });
+        setLcUsername(userData?.user?.leetcode_username);
       }
 
       // console.log("data: ", data);
@@ -126,7 +133,7 @@ export function PlatformForm() {
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="github_username" type="text" onChange={(e) => setGhUsername(e.target.value)} />
+            <Input id="lastname" placeholder="github_username" type="text" value={ghUsername} onChange={(e) => setGhUsername(e.target.value)} />
           </LabelInputContainer>
           <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
@@ -169,7 +176,7 @@ export function PlatformForm() {
         </div>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Input id="lastname" placeholder="leetcode_username" type="text" onChange={(e) => setLcUsername(e.target.value)} />
+            <Input id="lastname" placeholder="leetcode_username" type="text" value={lcUsername} onChange={(e) => setLcUsername(e.target.value)} />
           </LabelInputContainer>
           <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-[120px] text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
